@@ -65,7 +65,7 @@ export {
 #### app/containers/App.js
 ```javascript
 import React, { Component } from 'react';
-import { connect } from 'react-spawn';
+import { connect } from 'react-spawn-x';
 
 import { store } from '../store';
 import { addUser } from '../actions/user';
