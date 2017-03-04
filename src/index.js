@@ -1,3 +1,5 @@
 import { connect } from './connect';
 
-export { connect }
+export {
+  connect
+}

@@ -1,7 +1,7 @@
 {
   "name": "react-spawn-x",
-  "version": "0.1.1",
-  "description": "react connector for spawn-x",
+  "version": "1.0.0",
+  "description": "react connector for spawn-x. (Reactive management for javaScript applications)",
   "author": "AlexPlex",
   "license": "MIT",
   "main": "./lib/react-spawn-x.umd.js",
@@ -10,7 +10,9 @@
     "build": "npm run build:dev && npm run build:prod",
     "build:dev": "webpack",
     "build:prod": "set WEBPACK_ENV=build:prod&& webpack",
-    "dev": "set WEBPACK_ENV=dev&& webpack --watch"
+    "dev": "set WEBPACK_ENV=dev&& webpack --watch",
+    "precommit": "npm run build",
+    "prepush": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -20,12 +22,17 @@
     "state",
     "store",
     "app",
+    "management",
+    "control",
+    "predictable",
+    "live",
+    "observer",
+    "reactive",
     "redux",
     "flux",
     "mobx",
     "observable",
     "rxjs",
-    "reactive",
     "react",
     "reactjs"
   ],
@@ -34,11 +41,12 @@
     "babel-loader": "^6.3.2",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.22.0",
-    "babel-preset-stage-0": "^6.22.0",
     "babel-preset-react": "^6.23.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "husky": "^0.13.2",
     "webpack": "2.2.0"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0-0 || ^16.0.0-0"
+    "react": "^0.14.0 || ^15.0.0 || ^16.0.0"
   }
 }

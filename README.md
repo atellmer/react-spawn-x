@@ -1,10 +1,15 @@
 # react-spawn-x
-### React connector for [spawn-x](https://github.com/atellmer/spawn.js).
+### React connector for [spawn-x](https://github.com/atellmer/spawn-x).
 
 
 ## install
+With npm:
 ```
 npm install spawn-x react-spawn-x --save
+```
+With yarn:
+```
+yarn add spawn-x react-spawn-x
 ```
 
 ## Usage
@@ -23,24 +28,29 @@ ReactDOM.render(
 
 #### app/store/index.js
 ```javascript
-import { createStore } from 'spawn-x';
+import { createStore, addInterceptor } from 'spawn-x';
+
 
 const initialState = {
   users: [],
   some: {
     text: 'Hello World'
+  },
+  parent: {
+    child: 'I am child'
   }
 }
 
-const store = createStore(initialState);
-logger(store);
+const store = createStore(
+  initialState,
+  addInterceptor(logger)
+);
 
 function logger(store) {
- store.detect('*', () => {
-    if (/@/.test(store.select('->'))) {
-      console.log(store.select('->') + ' -> ', store.select('*'));
-    }
-  });
+  return next => action => {
+    next(action);
+    console.log('action: ', action.type + ' -> ', action.data);
+  }
 }
 
 export {
@@ -52,9 +62,11 @@ export {
 import { store } from '../store';
 
 
-const addUser = (user) => {
-  store.update('users', store.select('users').concat(user));
-  store.update('@ACTIONS.ADD_NEW_USER', new Date().getTime());
+const addUser = user => {
+  store.update('users', {
+    data: store.select('users').concat(user),
+    type: 'ADD_NEW_USER'
+  });
 };
 
 export {
@@ -79,18 +91,22 @@ class App extends Component {
         <MyPresenterComponent
           users={this.props.users}
           text={this.props.text}
+          data={this.props.data}
           addUser={addUser}/>
       </div>
     );
   }
 }
 
-const sectionState = {
+//our selection from state (for data we apply specific selector. It's just for example)
+const selection = {
   users: 'users',
-  text: 'some.text'
+  text: 'some.text',
+  data: ['parent.child', state => state.parent.child]
 };
 
-export default connect(store)(sectionState)(App);
+//wrap App component
+export default connect(store)(selection)(App);
 ```
 
 #### app/components/Presenter.js
@@ -103,7 +119,8 @@ class MyPresenter extends Component {
   handleSubmit = (ev) => {
     ev.preventDefault();
 
-    console.log('text from state: ', this.props.text);
+    console.log('some text from state: ', this.props.text);
+    console.log('some data from state: ', this.props.data);
 
     this.props.addUser({
       name: ev.target.name.value,
