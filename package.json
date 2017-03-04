@@ -10,9 +10,7 @@
     "build": "npm run build:dev && npm run build:prod",
     "build:dev": "webpack",
     "build:prod": "set WEBPACK_ENV=build:prod&& webpack",
-    "dev": "set WEBPACK_ENV=dev&& webpack --watch",
-    "precommit": "npm run build",
-    "prepush": "npm run build"
+    "dev": "set WEBPACK_ENV=dev&& webpack --watch"
   },
   "repository": {
     "type": "git",
