@@ -1,6 +1,6 @@
 {
   "name": "react-spawn-x",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "react connector for spawn-x. (Reactive management for javaScript applications)",
   "author": "AlexPlex",
   "license": "MIT",

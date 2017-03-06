@@ -1,3 +1,7 @@
+function deepEqual(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
 function isArray(target) {
   return Array.isArray(target);
 }
@@ -15,6 +19,7 @@ function error(message) {
 }
 
 export {
+  deepEqual,
   isArray,
   isFunc,
   isString,

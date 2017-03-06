@@ -1,4 +1,5 @@
 import {
+  deepEqual,
   isArray,
   isFunc,
   isString,
@@ -6,6 +7,7 @@ import {
 } from './helpers';
 
 export {
+  deepEqual,
   isArray,
   isFunc,
   isString,
