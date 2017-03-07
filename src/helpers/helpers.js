@@ -1,7 +1,3 @@
-function deepEqual(a, b) {
-  return JSON.stringify(a) === JSON.stringify(b);
-}
-
 function isArray(target) {
   return Array.isArray(target);
 }
@@ -14,14 +10,18 @@ function isString(target) {
   return typeof target === 'string';
 }
 
+function isUndefined(target) {
+  return typeof target === 'undefined';
+}
+
 function error(message) {
   throw new Error(message);
 }
 
 export {
-  deepEqual,
   isArray,
   isFunc,
   isString,
+  isUndefined,
   error
 }

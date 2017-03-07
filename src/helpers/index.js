@@ -1,15 +1,15 @@
 import {
-  deepEqual,
   isArray,
   isFunc,
   isString,
+  isUndefined,
   error
 } from './helpers';
 
 export {
-  deepEqual,
   isArray,
   isFunc,
   isString,
+  isUndefined,
   error
 }

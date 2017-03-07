@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import {
-  deepEqual,
   isArray,
   isString,
   isFunc,
+  isUndefined,
   error
 } from './helpers';
 
 
 const connect = store => selection => WrappedComponent => {
   return class ConnectWrapper extends Component {
-    constructor(props) {
-      super(props);
+
+    constructor(props, context) {
+      super(props, context);
       this.relevantState = {};
     }
 
@@ -23,73 +24,50 @@ const connect = store => selection => WrappedComponent => {
       this.resolve(false);
     }
 
-    resolve(onInit) {
+    resolve(isWillMount) {
       Object.keys(selection).forEach(key => {
+        let zone, selector;
+  
         if (isString(selection[key])) {
-          if (onInit) {
-            this.detect(selection[key]);
-          } else {
-            this.reject(selection[key])
-          }
-
-          return false;
-        }
-
-        if (isArray(selection[key])) {
-          if (onInit) {
-            this.detect(...selection[key]);
-          } else {
-            this.reject(...selection[key])
-          }
-
-          return false;
-        }
-
-        return error(`react-spawn-x: incorrect arguments for selection`);
-      });
-    }
-
-    detect(zone) {
-      store.detect(zone, this.updateWithRelevantState);
-    }
-
-    reject(zone) {
-      store.reject(zone, this.updateWithRelevantState);
-    }
-
-    updateWithRelevantState = () => {
-      Object.keys(selection).forEach(key => {
-        if (isString(selection[key])) {
-          this.checkState(key, selection[key]);
-
-          return false;
+          zone = selection[key];
+          selector = selection[key];
         }
 
         if (isArray(selection[key])) {
           if (selection[key].length === 1 && isString(selection[key][0])) {
-            this.checkState(key, selection[key][0]);
-
-            return false;
+            zone = selection[key][0];
+            selector = selection[key][0];
           }
 
-          if (selection[key].length > 1 && isFunc(selection[key][1])) {
-            this.checkState(key, selection[key][1]);
-
-            return false;
+          if (selection[key].length > 1 && isString(selection[key][0]) && isFunc(selection[key][1])) {
+            zone = selection[key][0];
+            selector = selection[key][1];
           }
         }
 
-        return error(`react-spawn-x: incorrect arguments for selection`);
+        if (isUndefined(zone) || isUndefined(selector)) {
+          return error(`react-spawn-x: incorrect arguments for selection`);
+        }
+
+        if (isWillMount) {
+          this.detect(zone, key, selector);
+        } else {
+          this.reject(zone);
+        }
       });
     }
 
-    checkState(key, selectionKey) {
-      const selectedState = store.select(selectionKey);
+    detect(zone, key, selector) {
+      store.detect(zone, this.updateWithState, key, selector);
+    }
 
-      if (!deepEqual(selectedState, this.relevantState[key])) {
-        this.relevantState[key] = selectedState;
-        this.forceUpdate();
-      }
+    reject(zone) {
+      store.reject(zone, this.updateWithState);
+    }
+
+    updateWithState = (key, selector) => {
+      this.relevantState[key] = store.select(selector);
+      this.forceUpdate();
     }
 
     render() {
