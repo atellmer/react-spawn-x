@@ -17,12 +17,17 @@ if (env === 'build:prod') {
 
 const config = {
   externals: {
-    react: 'react'
+    'react': {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react'
+    }
   },
   entry: path.resolve(__dirname, 'src/index.js'),
   output: {
     path: path.resolve(__dirname, 'lib'),
-    filename: filename.toLowerCase(),
+    filename: filename,
     library: library,
     libraryTarget: 'umd',
     umdNamedDefine: true
