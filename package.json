@@ -5,6 +5,7 @@
   "author": "AlexPlex",
   "license": "MIT",
   "main": "./lib/react-spawn-x.umd.js",
+  "typings": "./index.d.ts",
   "homepage": "https://github.com/atellmer/react-spawn-x",
   "scripts": {
     "build": "npm run build:dev && npm run build:prod",
